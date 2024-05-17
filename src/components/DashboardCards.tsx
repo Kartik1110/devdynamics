@@ -6,7 +6,7 @@ export default function DashboardCards({data}: {data: DashboardCardData[]}) {
         <div className="flex flex-row justify-center items-center space-x-4">
 
             {data.map((data, index) => (
-                    <Card key={data.id} x-chunk={`dashboard-01-chunk-${index}`} className={`border border-slate-400 hover:border-slate-800 bg-[${data.fillColor}]`}>
+                    <Card key={data.id} x-chunk={`dashboard-01-chunk-${index}`} className={`border border-slate-400 hover:border-slate-800`} style={{backgroundColor: `${data.fillColor}`}}>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm text-white font-semibold pr-2">
                                 {data.title}
