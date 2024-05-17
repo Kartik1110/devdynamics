@@ -1,3 +1,4 @@
+import { NAV_ITEMS } from "@/config/site";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import {
@@ -17,35 +18,15 @@ export default function Navbar() {
             <div>
                 <NavigationMenu>
                     <NavigationMenuList>
-                        <NavigationMenuItem>
-                            <a href={""}>
-                                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                    Product
-                                </NavigationMenuLink>
-                            </a>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <a href={""}>
-                                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                    Solution
-                                </NavigationMenuLink>
-                            </a>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <a href={""}>
-                                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                    Resources
-                                </NavigationMenuLink>
-                            </a>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
-
-                            <a href={""}>
-                                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                    Pricing
-                                </NavigationMenuLink>
-                            </a>
-                        </NavigationMenuItem>
+                        {NAV_ITEMS.map((item) => (
+                            <NavigationMenuItem key={item.id}>
+                                <a href={item.url}>
+                                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                        {item.title}
+                                    </NavigationMenuLink>
+                                </a>
+                            </NavigationMenuItem>
+                        ))}
                     </NavigationMenuList>
                 </NavigationMenu>
             </div>

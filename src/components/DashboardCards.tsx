@@ -1,53 +1,23 @@
-import { Activity, CreditCard, DollarSign, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { DashboardCardData } from "@/interfaces";
 
-export default function DashboardCards() {
+export default function DashboardCards({data}: {data: DashboardCardData[]}) {
     return (
         <div className="flex flex-row justify-center items-center space-x-4">
 
-            {
-                [
-                    {
-                        id: 1,
-                        title: "Total Revenue",
-                        value: "$45,231.89",
-                        percentage: "+20.1% from last month",
-                        icon: DollarSign,
-                    },
-                    {
-                        id: 2,
-                        title: "Subscriptions",
-                        value: "+2350",
-                        percentage: "+180.1% from last month",
-                        icon: Users,
-                    },
-                    {
-                        id: 3,
-                        title: "Sales",
-                        value: "+12,234",
-                        percentage: "+19% from last month",
-                        icon: CreditCard,
-                    },
-                    {
-                        id: 4,
-                        title: "Active Now",
-                        value: "+573",
-                        percentage: "+201 since last hour",
-                        icon: Activity,
-                    },
-                ].map((data, index) => (
-                    <Card key={data.id} x-chunk={`dashboard-01-chunk-${index}`} className="border border-slate-400 hover:shadow-md bg-indigo-200">
+            {data.map((data, index) => (
+                    <Card key={data.id} x-chunk={`dashboard-01-chunk-${index}`} className={`border border-slate-400 hover:border-slate-800 bg-[${data.fillColor}]`}>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">
+                            <CardTitle className="text-sm text-white font-semibold pr-2">
                                 {data.title}
                             </CardTitle>
-                            <data.icon className="h-4 w-4 text-muted-foreground" />
+                            <div className="h-4 w-4 text-white">{data.icon}</div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{data.value}</div>
-                            <p className="text-xs text-muted-foreground">
+                            <div className="text-2xl text-white font-bold">{data.value}</div>
+                            {data.percentage && <p className="text-xs text-white">
                                 {data.percentage}
-                            </p>
+                            </p>}
                         </CardContent>
                     </Card>
                 ))
