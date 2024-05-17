@@ -36,7 +36,7 @@ export default function DashboardCards() {
                         icon: Activity,
                     },
                 ].map((data, index) => (
-                    <Card key={data.id} x-chunk={`dashboard-01-chunk-${index}`} className="border border-slate-400 hover:shadow-md">
+                    <Card key={data.id} x-chunk={`dashboard-01-chunk-${index}`} className="border border-slate-400 hover:shadow-md bg-indigo-200">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
                                 {data.title}
