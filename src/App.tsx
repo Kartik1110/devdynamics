@@ -1,13 +1,11 @@
-import { useState } from 'react'
-import { Button } from './components/ui/button'
+import DashboardCards from './components/Dashboard'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <div className='w-full flex items-center justify-center mt-20 space-x-10'>
-      <h1 className='text-3xl'>{count}</h1>
-      <Button onClick={() => setCount((count) => count + 1)}>Increment</Button>
+    <div className='w-full flex flex-col items-center pt-10 space-y-5 px-40 h-screen'>
+      <h1 className='text-3xl font-bricolage'>Dashboard</h1>
+      <DashboardCards />
     </div>
   )
 }
