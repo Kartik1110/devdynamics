@@ -9,7 +9,7 @@ interface CardLayoutProps {
 
 export default function CardLayout({ title, content, icon }: CardLayoutProps) {
     return (
-        <Card className="hover:border hover:border-gray-400 h-[100%]">
+        <Card className="hover:border hover:border-gray-800 h-[100%]">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
                 <CardTitle className="text-lg font-medium">
                     {title}

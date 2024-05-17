@@ -5,6 +5,7 @@
   
 @layer base {
   :root {
+    --primary-devdynamics: 240, 100%, 60%;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -27,13 +28,19 @@
     --radius: 0.75rem;
   }
 
-  .font-bricolage {
-    font-family: "Bricolage Grotesque", sans-serif;
+  .font-sans {
+    /* font-family: "Bricolage Grotesque", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
     font-variation-settings:
-      "wdth" 100;
+      "wdth" 100; */
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+      "slnt" 0;
   }
 
   .dark {
