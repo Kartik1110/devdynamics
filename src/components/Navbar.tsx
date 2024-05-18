@@ -31,7 +31,7 @@ export default function Navbar() {
                 </NavigationMenu>
             </div>
             <div className="flex items-center space-x-4">
-                <Button variant="default" className="bg-primary">Search</Button>
+                <Button variant="default" className="bg-primary">Request Demo</Button>
                 <div>
                     <Avatar>
                         <AvatarImage src="https://github.com/shadcn.png" />
