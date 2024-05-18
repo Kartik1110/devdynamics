@@ -78,3 +78,47 @@ export const calulateLeadTimeForChanges = (authors: Author[]) => {
     }
   });
 };
+
+// Calculate change failure rate
+export const calculateChangeFailureRate = (authors: Author[]) => {
+  const authorsData: {
+    [key: string]: {
+      mergedPRCount: number;
+      incidentAlertCount: number;
+    };
+  } = {};
+
+  authors?.forEach((row) => {
+    const author = row.name;
+    authorsData[author] = {
+      mergedPRCount: 0,
+      incidentAlertCount: 0,
+    };
+
+    row.totalActivity.forEach((activity) => {
+      if (activity.name === "PR Merged") {
+        authorsData[author].mergedPRCount = parseInt(activity.value);
+      } else if (activity.name === "Incident Alerts") {
+        authorsData[author].incidentAlertCount = parseInt(activity.value);
+      }
+    });
+  });
+
+  const res = [];
+  for (const [author, authorData] of Object.entries(authorsData)) {
+    const { mergedPRCount, incidentAlertCount } = authorData;
+    const totalDeployments = mergedPRCount;
+    const failedDeployments = incidentAlertCount;
+
+    if (totalDeployments > 0) {
+      const changeFailureRate = (failedDeployments / totalDeployments) * 100;
+      res.push({
+        author,
+        changeFailureRate,
+      });
+    } else {
+      console.log(`No deployment data available for ${author}`);
+    }
+  }
+  return res;
+};
