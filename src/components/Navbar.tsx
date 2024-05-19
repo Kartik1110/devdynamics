@@ -11,7 +11,7 @@ import {
 
 export default function Navbar() {
     return (
-        <nav className="top-0 left-0 right-0 z-10 flex justify-between items-center p-3 px-10  backdrop-filter backdrop-blur-lg bg-opacity-30 border-b border-gray-800">
+        <nav className="top-0 left-0 right-0 z-10 flex justify-between items-center p-3 px-10  backdrop-filter backdrop-blur-lg bg-opacity-30 border-b border-gray-300">
             <div className="flex items-center">
                 <img src="https://assets-global.website-files.com/642535c7875ea6e60927dd49/65cb115f23533388f1d0b7e2_DevDynamics_Logo.svg" loading="lazy" alt="Untitled UI logotext" className="text-white" />
             </div>
