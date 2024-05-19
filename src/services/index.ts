@@ -1,5 +1,5 @@
 import { Author, DashboardCardsValues, RootObject } from "@/interfaces";
-import { median } from "@/utils";
+import { getFormattedName, median } from "@/utils";
 
 // Fetch worklog data
 export const getWorkLogData = async () => {
@@ -17,7 +17,7 @@ export const calculateDeploymentFrequency = (authors: Author[]) => {
   return authors?.reduce((acc: { author: string; PR: number }[], author) => {
     const mergedPRCount = author.totalActivity.find((activity) => activity.name === "PR Merged")?.value;
     if (mergedPRCount) {
-      acc.push({ author: author.name.split("@devdynamics.ai")[0], PR: +mergedPRCount || 0 });
+      acc.push({ author: getFormattedName(author.name), PR: +mergedPRCount || 0 });
     }
     return acc;
   }, []);
@@ -113,7 +113,7 @@ export const calculateChangeFailureRate = (authors: Author[]) => {
     if (totalDeployments > 0) {
       const changeFailureRate = (failedDeployments / totalDeployments) * 100;
       res.push({
-        author,
+        author: getFormattedName(author),
         changeFailureRate,
       });
     } else {
@@ -122,3 +122,47 @@ export const calculateChangeFailureRate = (authors: Author[]) => {
   }
   return res;
 };
+
+// Calculate mean time to restore (approximated by time between Incident Alerts and Incidents Resolved)
+export const calculateMeanTimeToRestore = (authors: Author[]) => {
+  const authorsData: {
+    [key: string]: {
+      incidentAlertCount: number;
+      incidentsResolvedCount: number;
+    };
+  } = {};
+
+  authors?.forEach((row) => {
+    const author = row.name;
+    authorsData[author] = {
+      incidentAlertCount: 0,
+      incidentsResolvedCount: 0,
+    };
+
+    row.totalActivity.forEach((activity) => {
+      if (activity.name === "Incident Alerts") {
+        authorsData[author].incidentAlertCount = parseInt(activity.value);
+      } else if (activity.name === "Incidents Resolved") {
+        authorsData[author].incidentsResolvedCount = parseInt(activity.value);
+      }
+    });
+  });
+
+  const res = [];
+  for (const [author, authorData] of Object.entries(authorsData)) {
+    const { incidentAlertCount, incidentsResolvedCount } = authorData;
+    const totalIncidentAlerts = incidentAlertCount;
+    const totalIncidentsResolved = incidentsResolvedCount;
+
+    if (totalIncidentAlerts > 0) {
+      const meanTimeToRestore = totalIncidentsResolved / totalIncidentAlerts;
+      res.push({
+        author: getFormattedName(author),
+        mttr: meanTimeToRestore,
+      });
+    } else {
+      console.log(`No incident data available for ${author}`);
+    }
+  }
+  return res;
+}

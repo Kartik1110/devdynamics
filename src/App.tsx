@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts"
-import { Activity, Ban, Bell, HeartPulse, Rocket, Timer } from 'lucide-react'
+import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { Activity, Ban, Bell, HeartPulse, Rocket, SquareActivity, Timer } from 'lucide-react'
 import { Progress } from './components/ui/progress';
 import CardLayout from './components/CardLayout'
 import DashboardCards from './components/DashboardCards'
 import { AuthorWorklog, DashboardCardData } from '@/interfaces';
-import { calculateChangeFailureRate, calculateDeploymentFrequency, calulateLeadTimeForChanges, getDashboardTotalValues, getWorkLogData } from '@/services';
+import { calculateChangeFailureRate, calculateDeploymentFrequency, calculateMeanTimeToRestore, calulateLeadTimeForChanges, getDashboardTotalValues, getWorkLogData } from '@/services';
 
 function App() {
   const [data, setData] = useState<AuthorWorklog | null>(null);
@@ -88,6 +88,9 @@ function App() {
   // Calculate change failure rate
   const changeFailureRate = calculateChangeFailureRate(authors || []);
 
+  // Calculate mean time to restore
+  const meanTimeToRestore = calculateMeanTimeToRestore(authors || []);
+
   if (!data) {
     return <div>Loading...</div>;
   }
@@ -106,8 +109,8 @@ function App() {
               <div className="h-[150px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={deploymentFrequency}>
-                    <Tooltip />
-                    <XAxis dataKey="author" />
+                    <Tooltip contentStyle={{borderRadius: 10}} />
+                    <XAxis dataKey="author" className='text-sm' />
                     <Bar dataKey="PR" fill={"#4D4DFF"} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -124,8 +127,8 @@ function App() {
               <div className="h-[150px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={leadTimesChartData}>
-                    <Tooltip />
-                    <XAxis dataKey="label" />
+                    <Tooltip contentStyle={{ borderRadius: 10 }} />
+                    <XAxis dataKey="label" className='text-sm' />
                     <Bar dataKey="count" fill={"#61CDBB"} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -147,7 +150,7 @@ function App() {
                 } else if (data.changeFailureRate >= 34 && data.changeFailureRate <= 66) {
                   color = 'bg-yellow-500';
                   value = 66
-                } else if (data.changeFailureRate >= 67 && data.changeFailureRate <= 100) {
+                } else if (data.changeFailureRate >= 67) {
                   color = 'bg-red-500';
                   value = 90
                 }
@@ -155,8 +158,8 @@ function App() {
                 return (
                   <div className='w-full flex flex-row items-center justify-between space-x-5' key={data.author}>
                     <p className={`text-center text-sm text-white p-1 m-1 rounded-full ${color}`}></p>
-                    <Progress color='#4D4DFF' value={value} />
-                    <p>{data.author.split("@devdynamics.ai")[0]}</p>
+                    <Progress value={value} />
+                    <p className='min-w-14 text-sm font-light'>{data.author}</p>
                   </div>
                 );
               })}
@@ -164,13 +167,34 @@ function App() {
           } />
         </div>
         <div className="col-span-1 h-[100%]">
-          <CardLayout title="Mean Time to Restore (MTTR)" content={<h1>Card</h1>} />
+          <CardLayout title="Mean Time to Restore (MTTR)" icon={<SquareActivity />} content={
+            <div className="h-[150px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  width={500}
+                  height={300}
+                  data={meanTimeToRestore}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="author" className='text-sm' />
+                  <YAxis className='text-sm' />
+                  <Tooltip contentStyle={{ borderRadius: 10 }} />
+                  <Line type="monotone" dataKey="mttr" stroke="#5F50A9" activeDot={{ r: 8 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          } />
         </div>
         <div className='col-span-2'>
-          <CardLayout title="Insights" content={<h1>Card</h1>} />
+          <CardLayout title="Developer Productivity" content={<></>} />
         </div>
         <div className='col-span-1'>
-          <CardLayout title="Insights" content={<h1>Card</h1>} />
+          <CardLayout title="Work in progress" content={<h1>Card</h1>} />
         </div>
       </div>
     </div>

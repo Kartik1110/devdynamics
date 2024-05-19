@@ -9,3 +9,12 @@ export function median(values: number[]) {
   const highMiddle = Math.ceil((values.length - 1) / 2);
   return (values[lowMiddle] + values[highMiddle]) / 2;
 }
+
+/**
+ * Formats a name by capitalizing the first letter of each word and removing any email domain or file extension.
+ * @param name - The name to be formatted.
+ * @returns The formatted name.
+ */
+export function getFormattedName(name: string) {
+  return name.split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ").split("@devdynamics.ai")[0].split(".")[0];
+}
