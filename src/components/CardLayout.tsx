@@ -16,7 +16,7 @@ interface CardLayoutProps {
 
 export default function CardLayout({ title, content, icon, tooltip }: CardLayoutProps) {
     return (
-        <Card className="hover:border hover:border-gray-300 h-[100%]">
+        <Card className="flex flex-col justify-center hover:border hover:shadow-lg h-[100%]">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
                 <CardTitle className="text-lg font-medium flex items-center justify-center">
                     {title}
@@ -36,7 +36,7 @@ export default function CardLayout({ title, content, icon, tooltip }: CardLayout
                         </TooltipProvider>
                     )}
                 </CardTitle>
-                <div className="h-4 w-4 text-muted-foreground">{icon}</div>
+                <div className="pb-4 h-4 w-4 text-muted-foreground">{icon}</div>
             </CardHeader>
             <CardContent>
                 {content}

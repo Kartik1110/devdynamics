@@ -14,7 +14,7 @@ interface DayWiseActivity {
   };
 }
 
-interface TotalActivity {
+export interface TotalActivity {
   name: string;
   value: string;
 }
@@ -59,4 +59,15 @@ export interface DashboardCardData {
   percentage?: string;
   icon: React.ReactNode;
   fillColor: string;
+}
+
+export interface TableData {
+  author: string;
+  prOpen: number;
+  prMerged: number;
+  commits: number;
+  prReviewed: number;
+  prComments: number;
+  incidentAlerts: number;
+  incidentsResolved: number;
 }

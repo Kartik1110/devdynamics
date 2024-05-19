@@ -1,4 +1,4 @@
-import { Author, DashboardCardsValues, RootObject } from "@/interfaces";
+import { Author, DashboardCardsValues, RootObject, TableData, TotalActivity } from "@/interfaces";
 import { getFormattedName, median } from "@/utils";
 
 // Fetch worklog data
@@ -165,4 +165,63 @@ export const calculateMeanTimeToRestore = (authors: Author[]) => {
     }
   }
   return res;
+};
+
+// Calculate developer productivity (approximated by PRs opened)
+export function calculateDevProductivity(authors: Author[]) {
+  interface PRByAuthorAndDay {
+    authorName: string;
+    data: {
+      date: string;
+      prCount: number;
+    }[];
+  }
+
+  const prByAuthorAndDay: PRByAuthorAndDay[] = [];
+
+  authors.forEach((row) => {
+    const name = row.name;
+    const authorData: { date: string; prCount: number }[] = [];
+
+    row.dayWiseActivity.forEach((activity) => {
+      const date = activity.date;
+      let prOpenCount = 0;
+
+      activity.items.children.forEach((item) => {
+        if (item.label === "PR Open") {
+          prOpenCount += parseInt(item.count);
+        }
+      });
+
+      authorData.push({
+        date: date,
+        prCount: prOpenCount,
+      });
+    });
+
+    prByAuthorAndDay.push({
+      authorName: name,
+      data: authorData,
+    });
+  });
+
+  return prByAuthorAndDay;
+}
+
+export function getTableData(data: Author[]): TableData[] {
+  return data?.map((author) => ({
+    author: author.name,
+    prOpen: getValue(author.totalActivity, "PR Open"),
+    prMerged: getValue(author.totalActivity, "PR Merged"),
+    commits: getValue(author.totalActivity, "Commits"),
+    prReviewed: getValue(author.totalActivity, "PR Reviewed"),
+    prComments: getValue(author.totalActivity, "PR Comments"),
+    incidentAlerts: getValue(author.totalActivity, "Incident Alerts"),
+    incidentsResolved: getValue(author.totalActivity, "Incidents Resolved"),
+  }));
+}
+
+export function getValue(activities: TotalActivity[], name: string): number {
+  const activity = activities.find((activity) => activity.name === name);
+  return activity ? parseInt(activity.value, 10) : 0;
 }

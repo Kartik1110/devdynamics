@@ -5,7 +5,8 @@ import { Progress } from './components/ui/progress';
 import CardLayout from './components/CardLayout'
 import DashboardCards from './components/DashboardCards'
 import { AuthorWorklog, DashboardCardData } from '@/interfaces';
-import { calculateChangeFailureRate, calculateDeploymentFrequency, calculateMeanTimeToRestore, calulateLeadTimeForChanges, getDashboardTotalValues, getWorkLogData } from '@/services';
+import { calculateChangeFailureRate, calculateDeploymentFrequency, calculateMeanTimeToRestore, calulateLeadTimeForChanges, getDashboardTotalValues, getTableData, getWorkLogData } from '@/services';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './components/ui/table';
 
 function App() {
   const [data, setData] = useState<AuthorWorklog | null>(null);
@@ -101,12 +102,15 @@ function App() {
   // Calculate mean time to restore
   const meanTimeToRestore = calculateMeanTimeToRestore(authors || []);
 
+  // table data for developer insights 
+  const tableData = getTableData(authors || []);
+
   if (!data) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className='w-full pt-5 pb-10 space-y-5 px-[15%]  h-auto bg-gray-50'>
+    <div className='w-full pt-5 pb-10 space-y-5 px-[15%]  h-auto bg-gray-50 p-4'>
       <h1 className='text-2xl font-sans font-medium'>Dashboard</h1>
       <div className="grid grid-flow-row-dense gap-10 grid-cols-3 grid-rows-3">
         <div className="col-span-2">
@@ -187,39 +191,68 @@ function App() {
         <div className="col-span-1 h-[100%]">
           {meanTimeToRestore.length > 0 ? (
             <CardLayout title="Mean Time to Restore (MTTR)"
-            tooltip={{ heading: 'Mean Time to Restore (MTTR)', text: 'Mean Time to Restore is caluculated by average time between an Incident Alert and its resolution for each author', bgColor: getRandomFillColor() }}
-             icon={<SquareActivity />} content={
-              <div className="h-[150px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    width={500}
-                    height={300}
-                    data={meanTimeToRestore}
-                    margin={{
-                      top: 5,
-                      right: 30,
-                      bottom: 5,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="author" className='text-sm' />
-                    <YAxis className='text-sm' />
-                    <Tooltip contentStyle={{ borderRadius: 10 }} />
-                    <Line type="monotone" dataKey="mttr" stroke="#5F50A9" activeDot={{ r: 8 }} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            } />
+              tooltip={{ heading: 'Mean Time to Restore (MTTR)', text: 'Mean Time to Restore is caluculated by average time between an Incident Alert and its resolution for each author', bgColor: getRandomFillColor() }}
+              icon={<SquareActivity />} content={
+                <div className="h-[150px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                      width={500}
+                      height={300}
+                      data={meanTimeToRestore}
+                      margin={{
+                        top: 5,
+                        right: 30,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="author" className='text-sm' />
+                      <YAxis className='text-sm' />
+                      <Tooltip contentStyle={{ borderRadius: 10 }} />
+                      <Line type="monotone" dataKey="mttr" stroke="#5F50A9" activeDot={{ r: 8 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              } />
           ) : (
             <CardLayout title="Mean Time to Restore (MTTR)" icon={<SquareActivity />} content={<h1>Not enough data</h1>} />
           )}
         </div>
         <div className='col-span-3'>
-          <CardLayout title="Developer Productivity" content={
-            <div className="h-[150px]">
-              <h1>Dev</h1>
-            </div>
-          } />
+          <CardLayout title="Developer Insights"
+            tooltip={{ heading: 'Developer insights', text: 'Overview of developer insights used to calculate productivity, risk of burnout etc.', bgColor: getRandomFillColor() }}
+            content={
+              <div className="h-[170px]">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-left">Developer Name</TableHead>
+                      <TableHead className="text-center">Commits</TableHead>
+                      <TableHead className="text-center">PR Open</TableHead>
+                      <TableHead className="text-center">PR Merged</TableHead>
+                      <TableHead className="text-center">PR Reviewed</TableHead>
+                      <TableHead className="text-center">PR Comments</TableHead>
+                      <TableHead className="text-center">Incident Alerts</TableHead>
+                      <TableHead className="text-center">Incident Resolved</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {tableData.map((stats) => (
+                      <TableRow key={stats.author}>
+                        <TableCell className="text-left">{stats.author}</TableCell>
+                        <TableCell className="text-center">{stats.commits}</TableCell>
+                        <TableCell className="text-center">{stats.prOpen}</TableCell>
+                        <TableCell className="text-center">{stats.prMerged}</TableCell>
+                        <TableCell className="text-center">{stats.prReviewed}</TableCell>
+                        <TableCell className="text-center">{stats.prComments}</TableCell>
+                        <TableCell className="text-center">{stats.incidentAlerts}</TableCell>
+                        <TableCell className="text-center">{stats.incidentsResolved}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            } />
         </div>
       </div>
     </div>
