@@ -109,7 +109,7 @@ function App() {
               <div className="h-[150px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={deploymentFrequency}>
-                    <Tooltip contentStyle={{borderRadius: 10}} />
+                    <Tooltip contentStyle={{ borderRadius: 10 }} />
                     <XAxis dataKey="author" className='text-sm' />
                     <Bar dataKey="PR" fill={"#4D4DFF"} />
                   </BarChart>
@@ -167,28 +167,32 @@ function App() {
           } />
         </div>
         <div className="col-span-1 h-[100%]">
-          <CardLayout title="Mean Time to Restore (MTTR)" icon={<SquareActivity />} content={
-            <div className="h-[150px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  width={500}
-                  height={300}
-                  data={meanTimeToRestore}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="author" className='text-sm' />
-                  <YAxis className='text-sm' />
-                  <Tooltip contentStyle={{ borderRadius: 10 }} />
-                  <Line type="monotone" dataKey="mttr" stroke="#5F50A9" activeDot={{ r: 8 }} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          } />
+          {meanTimeToRestore.length > 0 ? (
+            <CardLayout title="Mean Time to Restore (MTTR)" icon={<SquareActivity />} content={
+              <div className="h-[150px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart
+                    width={500}
+                    height={300}
+                    data={meanTimeToRestore}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="author" className='text-sm' />
+                    <YAxis className='text-sm' />
+                    <Tooltip contentStyle={{ borderRadius: 10 }} />
+                    <Line type="monotone" dataKey="mttr" stroke="#5F50A9" activeDot={{ r: 8 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            } />
+          ) : (
+            <CardLayout title="Mean Time to Restore (MTTR)" icon={<SquareActivity />} content={<h1>Not enough data</h1>} />
+          )}
         </div>
         <div className='col-span-2'>
           <CardLayout title="Developer Productivity" content={<></>} />

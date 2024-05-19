@@ -57,11 +57,11 @@
               },
               {
                 "name": "Incident Alerts",
-                "value": "0"
+                "value": "2"
               },
               {
                 "name": "Incidents Resolved",
-                "value": "0"
+                "value": "1"
               }
             ],
             "dayWiseActivity": [
@@ -1317,11 +1317,11 @@
               },
               {
                 "name": "Incident Alerts",
-                "value": "0"
+                "value": "2"
               },
               {
                 "name": "Incidents Resolved",
-                "value": "0"
+                "value": "2"
               }
             ],
             "dayWiseActivity": [
@@ -1947,11 +1947,11 @@
               },
               {
                 "name": "Incident Alerts",
-                "value": "0"
+                "value": "4"
               },
               {
                 "name": "Incidents Resolved",
-                "value": "0"
+                "value": "3"
               }
             ],
             "dayWiseActivity": [
